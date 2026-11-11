@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Homework & Lab Assignment Submission Deadline Tracking System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <!-- Graduation Cap Icon -->
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Assignment Tracker</h1>
+          <p class="brand-subtitle">Daily Homework & Lab Submission System</p>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Current Date Pill -->
+        <div class="date-pill" id="currentDateDisplay">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <span id="navDateText">Today</span>
+        </div>
+
+        <!-- Add Assignment Button -->
+        <button class="btn btn-primary" id="openAddModalBtn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Add Assignment</span>
+        </button>
+
+        <!-- Sample Data / Quick Reset Button -->
+        <button class="btn btn-secondary" id="loadSampleDataBtn" title="Reset with sample college assignments">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span class="btn-text-desktop">Sample Data</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Section 1: Dashboard Counters -->
+    <section class="dashboard-section" aria-label="Assignment Statistics">
+      <div class="section-header">
+        <h2>Dashboard Overview</h2>
+        <span class="section-subtitle">Real-time status of your academic tasks</span>
+      </div>
+
+      <div class="stats-grid">
+        <!-- Total Assignments Card -->
+        <div class="stat-card stat-total">
+          <div class="stat-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Total Assignments</span>
+            <span class="stat-value" id="statTotalCount">0</span>
+          </div>
+        </div>
+
+        <!-- Pending / Not Started Card -->
+        <div class="stat-card stat-pending">
+          <div class="stat-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Not Started</span>
+            <span class="stat-value" id="statPendingCount">0</span>
+          </div>
+        </div>
+
+        <!-- In Progress Card -->
+        <div class="stat-card stat-progress">
+          <div class="stat-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value" id="statProgressCount">0</span>
+          </div>
+        </div>
+
+        <!-- Completed Card -->
+        <div class="stat-card stat-completed">
+          <div class="stat-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Completed</span>
+            <span class="stat-value" id="statCompletedCount">0</span>
+          </div>
+        </div>
+
+        <!-- Overdue Card -->
+        <div class="stat-card stat-overdue">
+          <div class="stat-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Overdue</span>
+            <span class="stat-value" id="statOverdueCount">0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Filters, Search & Controls -->
+    <section class="controls-section" aria-label="Filters and Search">
+      <div class="controls-card">
+        <!-- Search Field -->
+        <div class="control-group search-group">
+          <label for="searchInput">Search Assignments</label>
+          <div class="input-with-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search title or subject...">
+          </div>
+        </div>
+
+        <!-- Filter by Subject -->
+        <div class="control-group">
+          <label for="filterSubject">Filter by Subject</label>
+          <select id="filterSubject">
+            <option value="all">All Subjects</option>
+            <!-- Dynamically populated -->
+          </select>
+        </div>
+
+        <!-- Filter by Status -->
+        <div class="control-group">
+          <label for="filterStatus">Filter by Status</label>
+          <select id="filterStatus">
+            <option value="all">All Statuses</option>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="overdue">Overdue Only</option>
+          </select>
+        </div>
+
+        <!-- Filter by Priority -->
+        <div class="control-group">
+          <label for="filterPriority">Filter by Priority</label>
+          <select id="filterPriority">
+            <option value="all">All Priorities</option>
+            <option value="High">High Priority</option>
+            <option value="Medium">Medium Priority</option>
+            <option value="Low">Low Priority</option>
+          </select>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="control-group btn-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-outline" id="resetFiltersBtn" title="Reset all search filters">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            <span>Clear Filters</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Urgency Color Legend for Students/Examiners -->
+    <div class="urgency-legend">
+      <span class="legend-title"><strong>Urgency Key:</strong></span>
+      <span class="legend-item"><span class="legend-dot dot-overdue"></span> Overdue (Deadline Passed)</span>
+      <span class="legend-item"><span class="legend-dot dot-today"></span> Due Today (Red Alert)</span>
+      <span class="legend-item"><span class="legend-dot dot-tomorrow"></span> Due Tomorrow (Amber Alert)</span>
+      <span class="legend-item"><span class="legend-dot dot-upcoming"></span> Upcoming (Green / Safe)</span>
+    </div>
+
+    <!-- Section 3: Assignment Cards Grid -->
+    <section class="assignments-section" aria-label="Assignments List">
+      <div class="section-header-row">
+        <div>
+          <h2>Assignments & Lab Work</h2>
+          <p class="section-subtitle" id="resultsCount">Showing all assignments</p>
+        </div>
+        <div class="sort-info">
+          <span class="sort-badge">Sorted by: Due Date (Nearest First)</span>
+        </div>
+      </div>
+
+      <!-- Container where cards are dynamically rendered by script.js -->
+      <div class="assignments-grid" id="assignmentsGrid">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Empty State Message when no assignments match -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <h3 id="emptyStateTitle">No Assignments Found</h3>
+        <p id="emptyStateText">There are no assignments matching your selected filters. Try clearing filters or create a new assignment.</p>
+        <button class="btn btn-primary" id="emptyStateActionBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Add New Assignment</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Dialog for Creating and Editing Assignments -->
+  <div class="modal-backdrop" id="assignmentModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle">Add New Assignment</h3>
+          <p class="modal-subtitle">Enter assignment details and submission deadline</p>
+        </div>
+        <button class="modal-close-btn" id="closeModalBtn" aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Assignment Form -->
+      <form id="assignmentForm" autocomplete="off">
+        <!-- Hidden input to store assignment ID when editing -->
+        <input type="hidden" id="assignmentId" value="">
+
+        <!-- Subject Name Field -->
+        <div class="form-group">
+          <label for="subjectName">Subject / Course Name <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="subjectName" 
+            placeholder="e.g. Operating Systems, Data Structures, Web Tech" 
+            required 
+            list="commonSubjects"
+          >
+          <datalist id="commonSubjects">
+            <option value="Data Structures & Algorithms">
+            <option value="Operating Systems">
+            <option value="Database Management Systems">
+            <option value="Computer Networks">
+            <option value="Web Technologies">
+            <option value="Software Engineering">
+            <option value="Machine Learning">
+          </datalist>
+          <small class="field-hint">Enter your course code or full subject title.</small>
+        </div>
+
+        <!-- Assignment Title Field -->
+        <div class="form-group">
+          <label for="assignmentTitle">Assignment / Lab Title <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="assignmentTitle" 
+            placeholder="e.g. Lab Experiment 4: CPU Scheduling Algorithms" 
+            required
+          >
+          <small class="field-hint">Specify homework chapter, problem set, or lab task.</small>
+        </div>
+
+        <!-- Row: Due Date and Submission Mode -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dueDate">Submission Due Date <span class="required">*</span></label>
+            <input 
+              type="date" 
+              id="dueDate" 
+              required
+            >
+            <small class="field-hint">Last date for submission.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="submissionMode">Submission Mode <span class="required">*</span></label>
+            <select id="submissionMode" required>
+              <option value="Online">Online (Portal / Classroom / GitHub)</option>
+              <option value="Physical Record">Physical Record (Lab Record / Handwritten)</option>
+            </select>
+            <small class="field-hint">How will you submit this work?</small>
+          </div>
+        </div>
+
+        <!-- Row: Priority and Status -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="priority">Priority Level <span class="required">*</span></label>
+            <select id="priority" required>
+              <option value="High">High Priority</option>
+              <option value="Medium" selected>Medium Priority</option>
+              <option value="Low">Low Priority</option>
+            </select>
+            <small class="field-hint">Helps organize urgent tasks first.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Initial Status <span class="required">*</span></label>
+            <select id="status" required>
+              <option value="Not Started" selected>Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+            <small class="field-hint">Current progress of this assignment.</small>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" id="cancelFormBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveAssignmentBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span id="saveBtnText">Save Assignment</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container for User Feedback -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p><strong>Daily Homework & Lab Assignment Submission Deadline Tracking System</strong></p>
+      <p class="footer-sub">Designed for College Students & Academic Project Demonstrations &bull; Built with pure HTML5, CSS3 &amp; JavaScript</p>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>
